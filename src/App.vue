@@ -36,90 +36,20 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 
-const applyPreset = () => {
-  const preset = presets[selectedPreset.value]
-  if (preset) {
-    bgColor.value = preset.bg
-    borderColor.value = preset.border
-    shadowColor.value = preset.shadow
-  }
-}
-
-const fontImage = new Image()
-fontImage.src = 'ascii.png'
-
-let charWidths = {}
-
-const charToIndex = char => {
-  const code = char.charCodeAt(0)
-  return code >= 32 && code <= 127 ? code - 32 : 0
-}
-
-const analyzeCharWidths = () => {
-  const offCanvas = document.createElement('canvas')
-  offCanvas.width = 128
-  offCanvas.height = 128
-  const ctx = offCanvas.getContext('2d')
-  ctx.drawImage(fontImage, 0, 0)
-
-  for (let i = 0; i < 96; i++) {
-    const sx = (i % 16) * tileSize
-    const sy = Math.floor(i / 16) * tileSize
-    const imageData = ctx.getImageData(sx, sy, tileSize, tileSize)
-    const data = imageData.data
-
-    let minX = tileSize
-    let maxX = 0
-
-    for (let y = 0; y < tileSize; y++) {
-      for (let x = 0; x < tileSize; x++) {
-        const idx = (y * tileSize + x) * 4
-        const alpha = data[idx + 3]
-        if (alpha > 0) {
-          if (x < minX) minX = x
-          if (x > maxX) maxX = x
-        }
-      }
-    }
-
-    const width = maxX >= minX ? maxX - minX + 1 : 0
-    charWidths[i] = { width, offsetX: minX }
-  }
-}
-
-// Текст ранга
 const text = ref('Rank')
-// Ссылка на canvas
 const canvas = ref(null)
-// Размер плитки (в пикселях)
-const tileSize = 8
-// Внутренний отступ
-const padding = 1
-// Расстояние между символами
-const spacing = 1
-// Высота canvas
-const height = tileSize
-// Ширина canvas
-const width = ref(0)
-// Источник изображения (data URL)
 const imageSrc = ref('')
-// Цвет фона
+
 const bgColor = ref('#282828')
-// Цвет рамки
 const borderColor = ref('#a0a0a0')
-// Цвет тени
 const shadowColor = ref('#505050')
-// Выбранный пресет
+
 const selectedPreset = ref('')
-// Показывать рамку?
 const showBorder = ref(true)
-// Показывать тень?
 const showShadow = ref(true)
 
-// Насыщенность тени
 const saturation = 0.08
 
-// Список готовых пресетов
 const presets = {
   Классика: { bg: '#282828', border: '#a0a0a0' },
   Изумруд: { bg: '#003e2f', border: '#00ffba' },
@@ -140,108 +70,98 @@ const presets = {
   Искажённый: { bg: '#0f3b1f', border: '#66ff99' }
 }
 
-// Добавление значения тени ко всем пресетам
+// Добавление тени ко всем пресетам
 for (const name in presets) {
   const preset = presets[name];
   preset.shadow = adjustHSL(preset.bg, saturation);
 }
 
+const applyPreset = () => {
+  const preset = presets[selectedPreset.value]
+  if (preset) {
+    bgColor.value = preset.bg
+    borderColor.value = preset.border
+    shadowColor.value = preset.shadow
+  }
+}
+
 function adjustHSL(colorHex, lightnessAdjustment) {
-  const r = parseInt(colorHex.slice(1, 3), 16) / 255;
-  const g = parseInt(colorHex.slice(3, 5), 16) / 255;
-  const b = parseInt(colorHex.slice(5, 7), 16) / 255;
+  const r = parseInt(colorHex.slice(1, 3), 16) / 255
+  const g = parseInt(colorHex.slice(3, 5), 16) / 255
+  const b = parseInt(colorHex.slice(5, 7), 16) / 255
 
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  const l = (max + min) / 2;
-
-  const s = max === min ? 0 : l < 0.5 ? (max - min) / (max + min) : (max - min) / (2 - max - min);
+  const max = Math.max(r, g, b)
+  const min = Math.min(r, g, b)
+  const l = (max + min) / 2
+  const s = max === min ? 0 : l < 0.5 ? (max - min) / (max + min) : (max - min) / (2 - max - min)
 
   const h = (() => {
-    if (max === min) return 0;
-    if (max === r) return ((g - b) / (max - min) + (g < b ? 6 : 0)) / 6;
-    if (max === g) return ((b - r) / (max - min) + 2) / 6;
-    return ((r - g) / (max - min) + 4) / 6;
-  })();
+    if (max === min) return 0
+    if (max === r) return ((g - b) / (max - min) + (g < b ? 6 : 0)) / 6
+    if (max === g) return ((b - r) / (max - min) + 2) / 6
+    return ((r - g) / (max - min) + 4) / 6
+  })()
 
-  const adjustedL = Math.min(Math.max(l + lightnessAdjustment, 0), 1);
-
-  const q = adjustedL < 0.5 ? adjustedL * (1 + s) : adjustedL + s - adjustedL * s;
-  const p = 2 * adjustedL - q;
+  const adjustedL = Math.min(Math.max(l + lightnessAdjustment, 0), 1)
+  const q = adjustedL < 0.5 ? adjustedL * (1 + s) : adjustedL + s - adjustedL * s
+  const p = 2 * adjustedL - q
 
   const toRGB = t => {
-    if (t < 0) t += 1;
-    if (t > 1) t -= 1;
-    if (t < 1 / 6) return p + (q - p) * 6 * t;
-    if (t < 1 / 2) return q;
-    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-    return p;
-  };
+    if (t < 0) t += 1
+    if (t > 1) t -= 1
+    if (t < 1 / 6) return p + (q - p) * 6 * t
+    if (t < 1 / 2) return q
+    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6
+    return p
+  }
 
-  const newR = Math.round(toRGB(h + 1 / 3) * 255);
-  const newG = Math.round(toRGB(h) * 255);
-  const newB = Math.round(toRGB(h - 1 / 3) * 255);
+  const newR = Math.round(toRGB(h + 1 / 3) * 255)
+  const newG = Math.round(toRGB(h) * 255)
+  const newB = Math.round(toRGB(h - 1 / 3) * 255)
 
-  return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
+  return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`
 }
 
 function draw() {
   const ctx = canvas.value.getContext('2d')
   ctx.imageSmoothingEnabled = false
 
-  const chars = text.value.toLowerCase().split('')
-  let totalWidth = padding + 1
+  ctx.font = '48px MinecraftTitleCyrillic'
+  const textMetrics = ctx.measureText(text.value)
+  const textWidth = Math.ceil(textMetrics.width)
+  const finalWidth = textWidth + 40
+  const finalHeight = 100
 
-  for (const char of chars) {
-    const i = charToIndex(char)
-    const w = charWidths[i]?.width ?? tileSize
-    totalWidth += w + spacing
-  }
-
-  const finalWidth = totalWidth - spacing + 2
-  const finalHeight = height + 1
   canvas.value.width = finalWidth
   canvas.value.height = finalHeight
-  width.value = finalWidth
 
+  // Фон
   ctx.fillStyle = bgColor.value
   ctx.fillRect(0, 0, finalWidth, finalHeight)
 
+  // Рамка
   if (showBorder.value) {
     ctx.strokeStyle = borderColor.value
-    ctx.lineWidth = 1
+    ctx.lineWidth = 2
     ctx.strokeRect(0, 0, finalWidth, finalHeight)
   }
 
-  let cursor = padding + 1
-  for (const char of chars) {
-    const i = charToIndex(char)
-    const tileX = (i % 16) * tileSize
-    const tileY = Math.floor(i / 16) * tileSize
-    const info = charWidths[i] ?? { width: tileSize, offsetX: 0 }
+  // Шрифт
+  ctx.font = '48px MinecraftTitleCyrillic'
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
 
-    if (showShadow.value) {
-      const shadowImage = colorize(fontImage, shadowColor.value);
-      ctx.drawImage(
-        shadowImage,
-        tileX + info.offsetX, tileY,
-        info.width, tileSize,
-        cursor + 1, 0,
-        info.width, tileSize
-      )
-    }
-
-    ctx.drawImage(
-      fontImage,
-      tileX + info.offsetX, tileY,
-      info.width, tileSize,
-      cursor, 0,
-      info.width, tileSize
-    )
-
-    cursor += info.width + spacing
+  // Тень
+  if (showShadow.value) {
+    ctx.fillStyle = shadowColor.value
+    ctx.fillText(text.value, finalWidth / 2 + 2, finalHeight / 2 + 2)
   }
 
+  // Основной текст
+  ctx.fillStyle = '#ffffff'
+  ctx.fillText(text.value, finalWidth / 2, finalHeight / 2)
+
+  // Экспорт изображения
   imageSrc.value = canvas.value.toDataURL()
 }
 
@@ -252,43 +172,20 @@ function downloadImage() {
   link.click()
 }
 
-function colorize(image, colorHex) {
-  const r = parseInt(colorHex.slice(1, 3), 16) / 255;
-  const g = parseInt(colorHex.slice(3, 5), 16) / 255;
-  const b = parseInt(colorHex.slice(5, 7), 16) / 255;
-  const imageSize = image.width;
-
-  const offscreen = new OffscreenCanvas(imageSize, imageSize);
-  const ctx = offscreen.getContext("2d");
-
-  ctx.drawImage(image, 0, 0);
-
-  const imageData = ctx.getImageData(0, 0, imageSize, imageSize);
-
-  for (let i = 0; i < imageData.data.length; i += 4) {
-    imageData.data[i + 0] *= r;
-    imageData.data[i + 1] *= g;
-    imageData.data[i + 2] *= b;
-  }
-
-  ctx.putImageData(imageData, 0, 0);
-
-  return offscreen;
-}
-
-watch([text, bgColor, borderColor, shadowColor, showBorder, showShadow], () => {
-  if (fontImage.complete) draw()
-})
-
+watch([text, bgColor, borderColor, shadowColor, showBorder, showShadow], draw)
 onMounted(() => {
-  fontImage.onload = () => {
-    analyzeCharWidths()
-    draw()
-  }
+  draw()
 })
 </script>
 
 <style>
+@font-face {
+  font-family: 'MinecraftTitleCyrillic';
+  src: url('/fonts/minecraft_title_cyrillic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   margin: 0;
   font-family: sans-serif;
@@ -298,7 +195,6 @@ body {
   justify-content: flex-start;
   align-items: flex-start;
   padding: 0;
-  /* Prevent scrolling */
   overflow: hidden;
 }
 
@@ -321,8 +217,9 @@ body {
 
 .color-pickers {
   display: flex;
+  flex-direction: column;
   gap: 1rem;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .preview-canvas {
@@ -369,13 +266,6 @@ button {
   color: #a0a0c0;
 }
 
-.color-pickers {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: flex-start;
-}
-
 .color-picker {
   margin-left: 0.5rem;
   border: none;
@@ -407,4 +297,3 @@ button {
   background: #4a4a7a;
 }
 </style>
-
