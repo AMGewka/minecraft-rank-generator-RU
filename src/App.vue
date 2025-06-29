@@ -129,10 +129,8 @@ function draw() {
   ctx.font = '48px MinecraftTitleCyrillic'
   const textMetrics = ctx.measureText(text.value)
   const textWidth = Math.ceil(textMetrics.width)
-  const textHeight = Math.ceil(textMetrics.actualBoundingBoxAscent + textMetrics.actualBoundingBoxDescent)
-
   const finalWidth = textWidth + 40
-  const finalHeight = textHeight + 40
+  const finalHeight = 100
 
   canvas.value.width = finalWidth
   canvas.value.height = finalHeight
@@ -148,24 +146,24 @@ function draw() {
     ctx.strokeRect(0, 0, finalWidth, finalHeight)
   }
 
-  // Центр текста
-  const x = finalWidth / 2
-  const y = finalHeight / 2 + (textMetrics.actualBoundingBoxAscent - textHeight / 2)
+  // Шрифт
+  ctx.font = '48px MinecraftTitleCyrillic'
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
 
   // Тень
   if (showShadow.value) {
     ctx.fillStyle = shadowColor.value
-    ctx.fillText(text.value, x + 2, y + 2)
+    ctx.fillText(text.value, finalWidth / 2 + 2, finalHeight / 2 + 2)
   }
 
   // Основной текст
   ctx.fillStyle = '#ffffff'
-  ctx.fillText(text.value, x, y)
+  ctx.fillText(text.value, finalWidth / 2, finalHeight / 2)
 
-  // Экспорт
+  // Экспорт изображения
   imageSrc.value = canvas.value.toDataURL()
 }
-
 
 function downloadImage() {
   const link = document.createElement('a')
