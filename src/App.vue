@@ -1,5 +1,11 @@
-<!-- Font Awesome CDN -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-rvA8MXH6YzWhgGu2+RINyNsJLXTrgbDUNZwSHdBdBDX8jVJzGUHPwEYc3Qyxydm7i0IH33RZjDPn7R1XD2ojIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<!-- Minecraft шрифты -->
+<link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet" />
+
+<!-- Retro пиксельный шрифт -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
 
 <template>
   <div class="app">
@@ -87,11 +93,14 @@ const showBorder = ref(true)
 const showShadow = ref(true)
 
 const fontOptions = [
+  { label: 'Minecraft v4 (CDN)', value: 'Minecraft' },
   { label: 'Minecraft Title Cyrillic', value: 'MinecraftTitleCyrillic' },
-  { label: 'Minecraft Rus', value: 'MinecraftRus'},
+  { label: 'Minecraft Rus', value: 'MinecraftRus' },
+  { label: 'Press Start 2P (Retro)', value: 'Press Start 2P' },
   { label: 'Pixy Regular', value: 'Pixy' },
   { label: 'Roboto Italic', value: 'Roboto' }
-]
+];
+
 const selectedFont = ref('MinecraftTitleCyrillic')
 
 const saturation = 0.08
