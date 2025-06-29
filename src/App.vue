@@ -15,10 +15,6 @@
       </label>
 
       <label>
-        Ширина:
-        <input v-model.number="imageWidth" type="number" min="1" class="dark-input" style="width: 100px;" />
-      </label>
-      <label>
         Высота:
         <input v-model.number="imageHeight" type="number" min="1" class="dark-input" style="width: 100px;" />
       </label>
@@ -66,8 +62,6 @@ const text = ref('Rank')
 const canvas = ref(null)
 const imageSrc = ref('')
 const fontSize = ref(48)
-
-const imageWidth = ref(300)
 const imageHeight = ref(128)
 
 const bgColor = ref('#282828')
@@ -166,7 +160,7 @@ function draw() {
   const textMetrics = ctx.measureText(text.value)
   const textWidth = Math.ceil(textMetrics.width)
 
-  const finalWidth = imageWidth.value || textWidth + 40
+  const finalWidth = textWidth + 40
   const finalHeight = imageHeight.value || fontSize.value + 60
 
   canvas.value.width = finalWidth
@@ -206,11 +200,12 @@ function downloadImage() {
   link.click()
 }
 
-watch([text, bgColor, borderColor, shadowColor, showBorder, showShadow, selectedFont, fontSize, imageWidth, imageHeight], draw)
+watch([text, bgColor, borderColor, shadowColor, showBorder, showShadow, selectedFont, fontSize, imageHeight], draw)
 onMounted(() => {
   draw()
 })
 </script>
+
 
 <style>
 @font-face {
