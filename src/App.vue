@@ -256,52 +256,22 @@ body {
   background: #1a1a1a;
   color: white;
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
   padding: 0;
   overflow: hidden;
+  height: 100vh;
 }
 
 .app {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
   padding: 1rem;
-  height: 100vh;
+  height: 100%;
   background: #1a1a1a;
-}
-
-.input {
-  padding: 0.25rem;
-  font-size: 1rem;
-  width: 200px;
-}
-
-.color-pickers {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: flex-start;
-}
-
-.preview-canvas {
-  display: none;
-}
-
-.preview-img {
-  image-rendering: pixelated;
-  width: auto;
-  height: 128px;
-}
-
-button {
-  padding: 0.4rem 0.8rem;
-  background: #333;
-  border: 1px solid #666;
-  color: white;
-  cursor: pointer;
 }
 
 .form-container {
@@ -314,6 +284,30 @@ button {
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   border: 1px solid #4a4a4a;
+  max-width: 800px;
+  width: 100%;
+}
+
+.title {
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.input {
+  padding: 0.25rem;
+  font-size: 1rem;
+  width: 200px;
 }
 
 .input.dark-input {
@@ -336,10 +330,11 @@ button {
   background: #1e1e2e;
   border-radius: 4px;
   padding: 0.2rem;
+  width: 40px;
+  height: 40px;
 }
 
 .dark-select {
-  margin-left: 0.5rem;
   padding: 0.4rem;
   border: 1px solid #4a4a4a;
   border-radius: 4px;
@@ -360,4 +355,70 @@ button {
 .dark-button:hover {
   background: #4a4a7a;
 }
+
+.labeled-input {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mini {
+  width: 100px;
+}
+
+.preview-canvas {
+  display: none;
+}
+
+.preview-img {
+  image-rendering: pixelated;
+  width: auto;
+  height: 128px;
+  border-radius: 6px;
+  border: 2px solid transparent;
+}
+
+.color-pickers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+
+.color-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  background: #1f1f2a;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #444;
+}
+
+.color-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.95rem;
+}
+
+.preset-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.preset-section label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fa {
+  color: #aaa;
+}
 </style>
+
