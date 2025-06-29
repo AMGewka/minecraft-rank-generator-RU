@@ -51,24 +51,43 @@ const showShadow = ref(true)
 const saturation = 0.08
 
 const presets = {
-  Классика: { bg: '#282828', border: '#a0a0a0' },
-  Изумруд: { bg: '#003e2f', border: '#00ffba' },
-  Золото: { bg: '#3b2c00', border: '#ffcc00' },
-  Незер: { bg: '#2b0f0f', border: '#ff3b3b' },
-  Лёд: { bg: '#0f2b3b', border: '#3bafff' },
-  Алмаз: { bg: '#0f3b3b', border: '#3bffff' },
-  Рубин: { bg: '#3b0f0f', border: '#ff3b6b' },
-  Аметист: { bg: '#2b0f3b', border: '#a03bff' },
-  Обсидиан: { bg: '#0f0f2b', border: '#3b3bff' },
-  Песчаник: { bg: '#3b2b0f', border: '#ffcc66' },
-  Лазурит: { bg: '#0f0f3b', border: '#3b6bff' },
-  Эндер: { bg: '#1a0f2b', border: '#7f3bff' },
-  Призмарин: { bg: '#0f3b2b', border: '#3bffcc' },
-  Медь: { bg: '#3b1f0f', border: '#ff9966' },
-  Светокамень: { bg: '#3b3b0f', border: '#ffff66' },
-  Багровый: { bg: '#3b0f1f', border: '#ff6699' },
-  Искажённый: { bg: '#0f3b1f', border: '#66ff99' }
+  // === Классические цвета ===
+  Белый:        { bg: '#f9fffe', border: '#ffffff' },
+  Оранжевый:    { bg: '#f9801d', border: '#ffaa00' },
+  Пурпурный:    { bg: '#c74ebd', border: '#d27fff' },
+  Голубой:      { bg: '#3ab3da', border: '#55ffff' },
+  Жёлтый:       { bg: '#fed83d', border: '#ffff55' },
+  Салатовый:    { bg: '#80c71f', border: '#55ff55' },
+  Розовый:      { bg: '#f38baa', border: '#ff55ff' },
+  Серый:        { bg: '#474f52', border: '#aaaaaa' },
+  Светло-серый: { bg: '#9d9d97', border: '#dddddd' },
+  Бирюзовый:    { bg: '#169c9c', border: '#55ffff' },
+  Синий:        { bg: '#3c44aa', border: '#5555ff' },
+  Коричневый:   { bg: '#835432', border: '#aa5500' },
+  Зелёный:      { bg: '#5e7c16', border: '#00aa00' },
+  Красный:      { bg: '#b02e26', border: '#ff5555' },
+  Чёрный:       { bg: '#1d1d21', border: '#000000' },
+
+  // === Разные сочетания ===
+  Классика:     { bg: '#282828', border: '#a0a0a0' },
+  Изумруд:      { bg: '#003e2f', border: '#00ffba' },
+  Золото:       { bg: '#3b2c00', border: '#ffcc00' },
+  Незер:        { bg: '#2b0f0f', border: '#ff3b3b' },
+  Лёд:          { bg: '#0f2b3b', border: '#3bafff' },
+  Алмаз:        { bg: '#0f3b3b', border: '#3bffff' },
+  Рубин:        { bg: '#3b0f0f', border: '#ff3b6b' },
+  Аметист:      { bg: '#2b0f3b', border: '#a03bff' },
+  Обсидиан:     { bg: '#0f0f2b', border: '#3b3bff' },
+  Песчаник:     { bg: '#3b2b0f', border: '#ffcc66' },
+  Лазурит:      { bg: '#0f0f3b', border: '#3b6bff' },
+  Эндер:        { bg: '#1a0f2b', border: '#7f3bff' },
+  Призмарин:    { bg: '#0f3b2b', border: '#3bffcc' },
+  Медь:         { bg: '#3b1f0f', border: '#ff9966' },
+  Светокамень:  { bg: '#3b3b0f', border: '#ffff66' },
+  Багровый:     { bg: '#3b0f1f', border: '#ff6699' },
+  Искажённый:   { bg: '#0f3b1f', border: '#66ff99' }
 }
+
 
 // Добавление тени ко всем пресетам
 for (const name in presets) {
