@@ -3,35 +3,49 @@
     <div class="form-container">
       <input v-model="text" placeholder="Введите текст ранга..." class="input dark-input" />
 
-      <!-- Новый список шрифтов -->
       <select v-model="selectedFont" class="dark-select">
         <option v-for="font in fontOptions" :key="font.value" :value="font.value">
           {{ font.label }}
         </option>
       </select>
+
       <label>
         Размер шрифта:
         <input v-model.number="fontSize" type="number" min="8" max="256" class="dark-input" style="width: 100px;" />
       </label>
 
+      <label>
+        Ширина:
+        <input v-model.number="imageWidth" type="number" min="1" class="dark-input" style="width: 100px;" />
+      </label>
+      <label>
+        Высота:
+        <input v-model.number="imageHeight" type="number" min="1" class="dark-input" style="width: 100px;" />
+      </label>
+
       <canvas ref="canvas" class="preview-canvas"></canvas>
       <img :src="imageSrc" alt="Предпросмотр" class="preview-img"
         :style="{ backgroundColor: bgColor, borderColor: borderColor }" />
+
       <div class="color-pickers">
         <label>
           Фон:
           <input type="color" v-model="bgColor" class="color-picker" />
+          <input type="text" v-model="bgColor" class="dark-input" style="width: 100px;" />
         </label>
         <label>
           Рамка:
           <input type="color" v-model="borderColor" class="color-picker" />
+          <input type="text" v-model="borderColor" class="dark-input" style="width: 100px;" />
           <input type="checkbox" v-model="showBorder" checked />
         </label>
         <label>
           Тень:
           <input type="color" v-model="shadowColor" class="color-picker" />
+          <input type="text" v-model="shadowColor" class="dark-input" style="width: 100px;" />
           <input type="checkbox" v-model="showShadow" checked />
         </label>
+
         <label>
           <select v-model="selectedPreset" @change="applyPreset" class="dark-select" size="10">
             <option disabled value="">Выберите пресет</option>
@@ -39,6 +53,7 @@
           </select>
         </label>
       </div>
+
       <button @click="downloadImage" class="dark-button">Скачать</button>
     </div>
   </div>
@@ -51,6 +66,9 @@ const text = ref('Rank')
 const canvas = ref(null)
 const imageSrc = ref('')
 const fontSize = ref(48)
+
+const imageWidth = ref(300)
+const imageHeight = ref(128)
 
 const bgColor = ref('#282828')
 const borderColor = ref('#a0a0a0')
@@ -147,8 +165,9 @@ function draw() {
   ctx.font = `${fontSize.value}px ${selectedFont.value}`
   const textMetrics = ctx.measureText(text.value)
   const textWidth = Math.ceil(textMetrics.width)
-  const finalWidth = textWidth + 40
-  const finalHeight = fontSize.value + 60
+
+  const finalWidth = imageWidth.value || textWidth + 40
+  const finalHeight = imageHeight.value || fontSize.value + 60
 
   canvas.value.width = finalWidth
   canvas.value.height = finalHeight
@@ -187,7 +206,7 @@ function downloadImage() {
   link.click()
 }
 
-watch([text, bgColor, borderColor, shadowColor, showBorder, showShadow, selectedFont, fontSize], draw)
+watch([text, bgColor, borderColor, shadowColor, showBorder, showShadow, selectedFont, fontSize, imageWidth, imageHeight], draw)
 onMounted(() => {
   draw()
 })
