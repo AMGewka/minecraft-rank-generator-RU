@@ -60,7 +60,7 @@ const presets = {
   Салатовый:    { bg: '#80c71f', border: '#55ff55' },
   Розовый:      { bg: '#f38baa', border: '#ff55ff' },
   Серый:        { bg: '#474f52', border: '#aaaaaa' },
-  Светло-серый: { bg: '#9d9d97', border: '#dddddd' },
+  "Светло-серый": { bg: '#9d9d97', border: '#dddddd' },
   Бирюзовый:    { bg: '#169c9c', border: '#55ffff' },
   Синий:        { bg: '#3c44aa', border: '#5555ff' },
   Коричневый:   { bg: '#835432', border: '#aa5500' },
