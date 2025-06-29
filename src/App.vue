@@ -1,34 +1,34 @@
 <template>
   <div class="app">
     <div class="form-container">
-      <input v-model="text" placeholder="Enter rank text..." class="input dark-input" />
+      <input v-model="text" placeholder="Введите текст ранга..." class="input dark-input" />
 
       <canvas ref="canvas" class="preview-canvas"></canvas>
-      <img :src="imageSrc" alt="Preview" class="preview-img"
+      <img :src="imageSrc" alt="Предпросмотр" class="preview-img"
         :style="{ backgroundColor: bgColor, borderColor: borderColor }" />
       <div class="color-pickers">
         <label>
-          Background:
+          Фон:
           <input type="color" v-model="bgColor" class="color-picker" />
         </label>
         <label>
-          Border:
+          Рамка:
           <input type="color" v-model="borderColor" class="color-picker" />
           <input type="checkbox" v-model="showBorder" checked />
         </label>
         <label>
-          Shadow:
+          Тень:
           <input type="color" v-model="shadowColor" class="color-picker" />
           <input type="checkbox" v-model="showShadow" checked />
         </label>
         <label>
           <select v-model="selectedPreset" @change="applyPreset" class="dark-select" size="10">
-            <option disabled value="">Select preset</option>
+            <option disabled value="">Выберите пресет</option>
             <option v-for="(_, name) in presets" :key="name" :value="name">{{ name }}</option>
           </select>
         </label>
       </div>
-      <button @click="downloadImage" class="dark-button">Download</button>
+      <button @click="downloadImage" class="dark-button">Скачать</button>
     </div>
   </div>
 </template>
@@ -36,46 +36,66 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 
+// Текст ранга
 const text = ref('Rank')
+// Ссылка на canvas
 const canvas = ref(null)
+// Размер плитки (в пикселях)
 const tileSize = 8
+// Внутренний отступ
 const padding = 1
+// Расстояние между символами
 const spacing = 1
+// Высота canvas
 const height = tileSize
+// Ширина canvas
 const width = ref(0)
+// Источник изображения (data URL)
 const imageSrc = ref('')
+// Цвет фона
 const bgColor = ref('#282828')
+// Цвет рамки
 const borderColor = ref('#a0a0a0')
+// Цвет тени
 const shadowColor = ref('#505050')
+// Выбранный пресет
 const selectedPreset = ref('')
+// Показывать рамку?
 const showBorder = ref(true)
+// Показывать тень?
 const showShadow = ref(true)
 
+// Насыщенность тени
 const saturation = 0.08
+
+// Список готовых пресетов
 const presets = {
-  Classic: { bg: '#282828', border: '#a0a0a0' },
-  Emerald: { bg: '#003e2f', border: '#00ffba' },
-  Gold: { bg: '#3b2c00', border: '#ffcc00' },
-  Nether: { bg: '#2b0f0f', border: '#ff3b3b' },
-  Ice: { bg: '#0f2b3b', border: '#3bafff' },
-  Diamond: { bg: '#0f3b3b', border: '#3bffff' },
-  Ruby: { bg: '#3b0f0f', border: '#ff3b6b' },
-  Amethyst: { bg: '#2b0f3b', border: '#a03bff' },
-  Obsidian: { bg: '#0f0f2b', border: '#3b3bff' },
-  Sandstone: { bg: '#3b2b0f', border: '#ffcc66' },
-  Lapis: { bg: '#0f0f3b', border: '#3b6bff' },
-  Ender: { bg: '#1a0f2b', border: '#7f3bff' },
-  Prismarine: { bg: '#0f3b2b', border: '#3bffcc' },
-  Copper: { bg: '#3b1f0f', border: '#ff9966' },
-  Glowstone: { bg: '#3b3b0f', border: '#ffff66' },
-  Crimson: { bg: '#3b0f1f', border: '#ff6699' },
-  Warped: { bg: '#0f3b1f', border: '#66ff99' }
+  Классика: { bg: '#282828', border: '#a0a0a0' },
+  Изумруд: { bg: '#003e2f', border: '#00ffba' },
+  Золото: { bg: '#3b2c00', border: '#ffcc00' },
+  Незер: { bg: '#2b0f0f', border: '#ff3b3b' },
+  Лёд: { bg: '#0f2b3b', border: '#3bafff' },
+  Алмаз: { bg: '#0f3b3b', border: '#3bffff' },
+  Рубин: { bg: '#3b0f0f', border: '#ff3b6b' },
+  Аметист: { bg: '#2b0f3b', border: '#a03bff' },
+  Обсидиан: { bg: '#0f0f2b', border: '#3b3bff' },
+  Песчаник: { bg: '#3b2b0f', border: '#ffcc66' },
+  Лазурит: { bg: '#0f0f3b', border: '#3b6bff' },
+  Эндер: { bg: '#1a0f2b', border: '#7f3bff' },
+  Призмарин: { bg: '#0f3b2b', border: '#3bffcc' },
+  Медь: { bg: '#3b1f0f', border: '#ff9966' },
+  Светокамень: { bg: '#3b3b0f', border: '#ffff66' },
+  Багровый: { bg: '#3b0f1f', border: '#ff6699' },
+  Искажённый: { bg: '#0f3b1f', border: '#66ff99' }
 }
 
+// Добавление значения тени ко всем пресетам
 for (const name in presets) {
   const preset = presets[name];
   preset.shadow = adjustHSL(preset.bg, saturation);
 }
+</script>
+
 
 function adjustHSL(colorHex, lightnessAdjustment) {
   const r = parseInt(colorHex.slice(1, 3), 16) / 255;
