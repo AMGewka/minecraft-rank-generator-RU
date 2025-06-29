@@ -9,6 +9,10 @@
           {{ font.label }}
         </option>
       </select>
+      <label>
+        Размер шрифта:
+        <input v-model.number="fontSize" type="number" min="8" max="256" class="dark-input" style="width: 100px;" />
+      </label>
 
       <canvas ref="canvas" class="preview-canvas"></canvas>
       <img :src="imageSrc" alt="Предпросмотр" class="preview-img"
@@ -46,6 +50,7 @@ import { ref, watch, onMounted } from 'vue'
 const text = ref('Rank')
 const canvas = ref(null)
 const imageSrc = ref('')
+const fontSize = ref(48)
 
 const bgColor = ref('#282828')
 const borderColor = ref('#a0a0a0')
@@ -158,7 +163,7 @@ function draw() {
   const ctx = canvas.value.getContext('2d')
   ctx.imageSmoothingEnabled = false
 
-  ctx.font = `48px ${selectedFont.value}`
+  ctx.font = `${fontSize.value}px ${selectedFont.value}`
   const textMetrics = ctx.measureText(text.value)
   const textWidth = Math.ceil(textMetrics.width)
   const finalWidth = textWidth + 40
@@ -207,7 +212,7 @@ function downloadImage() {
   link.click()
 }
 
-watch([text, bgColor, borderColor, shadowColor, showBorder, showShadow, selectedFont], draw)
+watch([text, bgColor, borderColor, shadowColor, showBorder, showShadow, selectedFont, fontSize], draw)
 onMounted(() => {
   draw()
 })
@@ -232,7 +237,7 @@ onMounted(() => {
   font-family: 'Roboto';
   src: url('/fonts/Roboto-Italic.ttf') format('truetype');
   font-weight: normal;
-  font-style: italic;
+  font-style: normal;
 }
 
 body {
