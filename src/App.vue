@@ -36,6 +36,15 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 
+const applyPreset = () => {
+  const preset = presets[selectedPreset.value]
+  if (preset) {
+    bgColor.value = preset.bg
+    borderColor.value = preset.border
+    shadowColor.value = preset.shadow
+  }
+}
+
 // Текст ранга
 const text = ref('Rank')
 // Ссылка на canvas
@@ -136,14 +145,6 @@ function adjustHSL(colorHex, lightnessAdjustment) {
   return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
 }
 </script>
-const applyPreset = () => {
-  const preset = presets[selectedPreset.value]
-  if (preset) {
-    bgColor.value = preset.bg
-    borderColor.value = preset.border
-    shadowColor.value = preset.shadow
-  }
-}
 
 const fontImage = new Image()
 fontImage.src = 'ascii.png'
