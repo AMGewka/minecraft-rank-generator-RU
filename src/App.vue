@@ -70,42 +70,22 @@ const selectedFont = ref('MinecraftTitleCyrillic')
 const saturation = 0.08
 
 const presets = {
-  // === Классические цвета ===
-  Чёрный:        { bg: '#2A2A2A', border: '#000000' },
+  "Чёрный":        { bg: '#2A2A2A', border: '#000000' },
   "Тёмно-синий":   { bg: '#00002A', border: '#0000AA' },
   "Тёмно-зелёный": { bg: '#002A00', border: '#00AA00' },
   "Тёмно-бирюзовый": { bg: '#002A2A', border: '#00AAAA' },
   "Тёмно-красный": { bg: '#2A0000', border: '#AA0000' },
   "Тёмно-пурпурный": { bg: '#2A002A', border: '#AA00AA' },
-  Золотой:       { bg: '#2A2A00', border: '#FFAA00' },
-  Серый:         { bg: '#2A2A2A', border: '#AAAAAA' },
+  "Золотой":       { bg: '#2A2A00', border: '#FFAA00' },
+  "Серый":         { bg: '#2A2A2A', border: '#AAAAAA' },
   "Тёмно-серый":   { bg: '#151515', border: '#555555' },
-  Синий:         { bg: '#15153F', border: '#5555FF' },
-  Зелёный:       { bg: '#153F15', border: '#55FF55' },
-  Бирюзовый:     { bg: '#153F3F', border: '#55FFFF' },
-  Красный:       { bg: '#3F1515', border: '#FF5555' },
+  "Синий":         { bg: '#15153F', border: '#5555FF' },
+  "Зелёный":       { bg: '#153F15', border: '#55FF55' },
+  "Бирюзовый":     { bg: '#153F3F', border: '#55FFFF' },
+  "Красный":       { bg: '#3F1515', border: '#FF5555' },
   "Светло-пурпурный": { bg: '#3F153F', border: '#FF55FF' },
-  Жёлтый:        { bg: '#3F3F15', border: '#FFFF55' },
-  Белый:         { bg: '#3F3F3F', border: '#FFFFFF' },
-
-  // === Разные сочетания ===
-  Классика:     { bg: '#282828', border: '#a0a0a0' },
-  Изумруд:      { bg: '#003e2f', border: '#00ffba' },
-  Золото:       { bg: '#3b2c00', border: '#ffcc00' },
-  Незер:        { bg: '#2b0f0f', border: '#ff3b3b' },
-  Лёд:          { bg: '#0f2b3b', border: '#3bafff' },
-  Алмаз:        { bg: '#0f3b3b', border: '#3bffff' },
-  Рубин:        { bg: '#3b0f0f', border: '#ff3b6b' },
-  Аметист:      { bg: '#2b0f3b', border: '#a03bff' },
-  Обсидиан:     { bg: '#0f0f2b', border: '#3b3bff' },
-  Песчаник:     { bg: '#3b2b0f', border: '#ffcc66' },
-  Лазурит:      { bg: '#0f0f3b', border: '#3b6bff' },
-  Эндер:        { bg: '#1a0f2b', border: '#7f3bff' },
-  Призмарин:    { bg: '#0f3b2b', border: '#3bffcc' },
-  Медь:         { bg: '#3b1f0f', border: '#ff9966' },
-  Светокамень:  { bg: '#3b3b0f', border: '#ffff66' },
-  Багровый:     { bg: '#3b0f1f', border: '#ff6699' },
-  Искажённый:   { bg: '#0f3b1f', border: '#66ff99' }
+  "Жёлтый":        { bg: '#3F3F15', border: '#FFFF55' },
+  "Белый":         { bg: '#3F3F3F', border: '#FFFFFF' },
 }
 
 for (const name in presets) {
@@ -167,41 +147,35 @@ function draw() {
   const textMetrics = ctx.measureText(text.value)
   const textWidth = Math.ceil(textMetrics.width)
   const finalWidth = textWidth + 40
-  const finalHeight = 100
+  const finalHeight = fontSize.value + 60
 
   canvas.value.width = finalWidth
   canvas.value.height = finalHeight
 
-  // Фон
   ctx.fillStyle = bgColor.value
   ctx.fillRect(0, 0, finalWidth, finalHeight)
 
-  // Рамка
   if (showBorder.value) {
     ctx.strokeStyle = borderColor.value
     ctx.lineWidth = 2
     ctx.strokeRect(0, 0, finalWidth, finalHeight)
   }
 
-  // Шрифт
-  ctx.font = `48px ${selectedFont.value}`
+  ctx.font = `${fontSize.value}px ${selectedFont.value}`
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
 
   const centerX = finalWidth / 2
   const centerY = finalHeight / 2 + 4
 
-  // Тень
   if (showShadow.value) {
     ctx.fillStyle = shadowColor.value
     ctx.fillText(text.value, centerX + 2, centerY + 2)
   }
 
-  // Основной текст
   ctx.fillStyle = '#ffffff'
   ctx.fillText(text.value, centerX, centerY)
 
-  // Экспорт изображения
   imageSrc.value = canvas.value.toDataURL()
 }
 
