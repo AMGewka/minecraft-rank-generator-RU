@@ -39,6 +39,13 @@ jobs:
         run: npm install
       - name: Сборка
         run: npm run build
+
+      - name: Запустить проект (npm start)
+        run: |
+          npm start &
+          sleep 10
+          curl -I http://localhost:3000 || true
+
       - name: Настроить GitHub Pages
         uses: actions/configure-pages@v3
       - name: Загрузить артефакт
