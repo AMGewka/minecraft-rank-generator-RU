@@ -45,7 +45,7 @@ const applyPreset = () => {
   }
 }
 
-onst fontImage = new Image()
+const fontImage = new Image()
 fontImage.src = 'ascii.png'
 
 let charWidths = {}
@@ -146,8 +146,6 @@ for (const name in presets) {
   preset.shadow = adjustHSL(preset.bg, saturation);
 }
 
-
-
 function adjustHSL(colorHex, lightnessAdjustment) {
   const r = parseInt(colorHex.slice(1, 3), 16) / 255;
   const g = parseInt(colorHex.slice(3, 5), 16) / 255;
@@ -186,16 +184,13 @@ function adjustHSL(colorHex, lightnessAdjustment) {
 
   return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
 }
-</script>
 
-c
-
-const draw = () => {
+function draw() {
   const ctx = canvas.value.getContext('2d')
   ctx.imageSmoothingEnabled = false
 
   const chars = text.value.toLowerCase().split('')
-  let totalWidth = padding + 1 // Extra padding for left and right
+  let totalWidth = padding + 1
 
   for (const char of chars) {
     const i = charToIndex(char)
@@ -203,8 +198,8 @@ const draw = () => {
     totalWidth += w + spacing
   }
 
-  const finalWidth = totalWidth - spacing + 2 // Extra padding for right
-  const finalHeight = height + 1 // Extra padding for top, bottom, and 1 extra pixel at the bottom
+  const finalWidth = totalWidth - spacing + 2
+  const finalHeight = height + 1
   canvas.value.width = finalWidth
   canvas.value.height = finalHeight
   width.value = finalWidth
@@ -214,11 +209,11 @@ const draw = () => {
 
   if (showBorder.value) {
     ctx.strokeStyle = borderColor.value
-    ctx.lineWidth = 1 // Border thickness
+    ctx.lineWidth = 1
     ctx.strokeRect(0, 0, finalWidth, finalHeight)
   }
 
-  let cursor = padding + 1 // Start with extra padding
+  let cursor = padding + 1
   for (const char of chars) {
     const i = charToIndex(char)
     const tileX = (i % 16) * tileSize
@@ -231,7 +226,7 @@ const draw = () => {
         shadowImage,
         tileX + info.offsetX, tileY,
         info.width, tileSize,
-        cursor + 1, 0, // Extra padding for top
+        cursor + 1, 0,
         info.width, tileSize
       )
     }
@@ -240,7 +235,7 @@ const draw = () => {
       fontImage,
       tileX + info.offsetX, tileY,
       info.width, tileSize,
-      cursor, 0, // Extra padding for top
+      cursor, 0,
       info.width, tileSize
     )
 
@@ -412,3 +407,4 @@ button {
   background: #4a4a7a;
 }
 </style>
+
