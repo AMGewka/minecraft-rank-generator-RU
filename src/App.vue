@@ -151,19 +151,23 @@ function draw() {
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
 
+  const centerX = finalWidth / 2
+  const centerY = finalHeight / 2 + 4  // ← смещение вниз на 4px
+
   // Тень
   if (showShadow.value) {
     ctx.fillStyle = shadowColor.value
-    ctx.fillText(text.value, finalWidth / 2 + 2, finalHeight / 2 + 2)
+    ctx.fillText(text.value, centerX + 2, centerY + 2)
   }
 
   // Основной текст
   ctx.fillStyle = '#ffffff'
-  ctx.fillText(text.value, finalWidth / 2, finalHeight / 2)
+  ctx.fillText(text.value, centerX, centerY)
 
   // Экспорт изображения
   imageSrc.value = canvas.value.toDataURL()
 }
+
 
 function downloadImage() {
   const link = document.createElement('a')
