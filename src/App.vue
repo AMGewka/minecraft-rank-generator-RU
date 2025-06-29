@@ -4,9 +4,6 @@
 <!-- Minecraft шрифты -->
 <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet" />
 
-<!-- Retro пиксельный шрифт -->
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-
 <template>
   <div class="app">
     <div class="form-container">
@@ -96,7 +93,6 @@ const fontOptions = [
   { label: 'Minecraft v4 (CDN)', value: 'Minecraft' },
   { label: 'Minecraft Title Cyrillic', value: 'MinecraftTitleCyrillic' },
   { label: 'Minecraft Rus', value: 'MinecraftRus' },
-  { label: 'Press Start 2P (Retro)', value: 'Press Start 2P' },
   { label: 'Pixy Regular', value: 'Pixy' },
   { label: 'Roboto Italic', value: 'Roboto' }
 ];
