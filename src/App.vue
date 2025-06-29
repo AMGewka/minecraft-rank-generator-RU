@@ -172,7 +172,7 @@ function draw() {
 function downloadImage() {
   const link = document.createElement('a')
   link.href = imageSrc.value
-  link.download = 'rank.png'
+  link.download = `${text.value || 'rank'}.png` // ← имя по тексту, по умолчанию "rank"
   link.click()
 }
 
