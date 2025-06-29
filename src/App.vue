@@ -62,6 +62,7 @@ const showShadow = ref(true)
 
 const fontOptions = [
   { label: 'Minecraft Title Cyrillic', value: 'MinecraftTitleCyrillic' },
+  { label: 'Minecraft Rus', value: 'MinecraftRus'},
   { label: 'Pixy Regular', value: 'Pixy' },
   { label: 'Roboto Italic', value: 'Roboto' }
 ]
@@ -196,6 +197,13 @@ onMounted(() => {
 @font-face {
   font-family: 'MinecraftTitleCyrillic';
   src: url('/fonts/minecraft_title_cyrillic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MinecraftRus';
+  src: url('/fonts/minecraft.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
