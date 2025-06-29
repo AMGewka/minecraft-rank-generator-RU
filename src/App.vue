@@ -1,56 +1,70 @@
+<!-- Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-rvA8MXH6YzWhgGu2+RINyNsJLXTrgbDUNZwSHdBdBDX8jVJzGUHPwEYc3Qyxydm7i0IH33RZjDPn7R1XD2ojIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 <template>
   <div class="app">
     <div class="form-container">
-      <input v-model="text" placeholder="Введите текст ранга..." class="input dark-input" />
+      <h1 class="title"><i class="fas fa-paint-brush"></i> Генератор Рангов</h1>
 
-      <select v-model="selectedFont" class="dark-select">
-        <option v-for="font in fontOptions" :key="font.value" :value="font.value">
-          {{ font.label }}
-        </option>
-      </select>
+      <div class="row">
+        <input v-model="text" placeholder="Введите текст ранга..." class="input dark-input" />
 
-      <label>
-        Размер шрифта:
-        <input v-model.number="fontSize" type="number" min="8" max="256" class="dark-input" style="width: 100px;" />
-      </label>
+        <select v-model="selectedFont" class="dark-select">
+          <option v-for="font in fontOptions" :key="font.value" :value="font.value">
+            {{ font.label }}
+          </option>
+        </select>
+      </div>
 
-      <label>
-        Высота:
-        <input v-model.number="imageHeight" type="number" min="1" class="dark-input" style="width: 100px;" />
-      </label>
+      <div class="row">
+        <label class="labeled-input">
+          <i class="fas fa-text-height"></i>
+          Размер шрифта:
+          <input v-model.number="fontSize" type="number" min="8" max="256" class="dark-input mini" />
+        </label>
+
+        <label class="labeled-input">
+          <i class="fas fa-ruler-horizontal"></i>
+          Высота:
+          <input v-model.number="imageHeight" type="number" min="1" class="dark-input mini" />
+        </label>
+      </div>
 
       <canvas ref="canvas" class="preview-canvas"></canvas>
       <img :src="imageSrc" alt="Предпросмотр" class="preview-img"
         :style="{ backgroundColor: bgColor, borderColor: borderColor }" />
 
       <div class="color-pickers">
-        <label>
-          Фон:
+        <div class="color-group">
+          <label><i class="fas fa-fill-drip"></i> Фон:</label>
           <input type="color" v-model="bgColor" class="color-picker" />
-          <input type="text" v-model="bgColor" class="dark-input" style="width: 100px;" />
-        </label>
-        <label>
-          Рамка:
+          <input type="text" v-model="bgColor" class="dark-input mini" />
+        </div>
+        <div class="color-group">
+          <label><i class="fas fa-border-style"></i> Рамка:</label>
           <input type="color" v-model="borderColor" class="color-picker" />
-          <input type="text" v-model="borderColor" class="dark-input" style="width: 100px;" />
-          <input type="checkbox" v-model="showBorder" checked />
-        </label>
-        <label>
-          Тень:
+          <input type="text" v-model="borderColor" class="dark-input mini" />
+          <label><input type="checkbox" v-model="showBorder" /> Показать</label>
+        </div>
+        <div class="color-group">
+          <label><i class="fas fa-cloud-showers-heavy"></i> Тень:</label>
           <input type="color" v-model="shadowColor" class="color-picker" />
-          <input type="text" v-model="shadowColor" class="dark-input" style="width: 100px;" />
-          <input type="checkbox" v-model="showShadow" checked />
-        </label>
-
-        <label>
-          <select v-model="selectedPreset" @change="applyPreset" class="dark-select" size="10">
-            <option disabled value="">Выберите пресет</option>
-            <option v-for="(_, name) in presets" :key="name" :value="name">{{ name }}</option>
-          </select>
-        </label>
+          <input type="text" v-model="shadowColor" class="dark-input mini" />
+          <label><input type="checkbox" v-model="showShadow" /> Показать</label>
+        </div>
       </div>
 
-      <button @click="downloadImage" class="dark-button">Скачать</button>
+      <div class="preset-section">
+        <label><i class="fas fa-palette"></i> Пресеты:</label>
+        <select v-model="selectedPreset" @change="applyPreset" class="dark-select" size="6">
+          <option disabled value="">Выберите...</option>
+          <option v-for="(_, name) in presets" :key="name" :value="name">{{ name }}</option>
+        </select>
+      </div>
+
+      <button @click="downloadImage" class="dark-button">
+        <i class="fas fa-download"></i> Скачать
+      </button>
     </div>
   </div>
 </template>
