@@ -56,7 +56,9 @@ const showBorder = ref(true)
 const showShadow = ref(true)
 
 const fontOptions = [
-  { label: 'Minecraft Title Cyrillic', value: 'MinecraftTitleCyrillic' }
+  { label: 'Minecraft Title Cyrillic', value: 'MinecraftTitleCyrillic' },
+  { label: 'Pixy Regular', value: 'Pixy' },
+  { label: 'Roboto Italic', value: 'Roboto' }
 ]
 const selectedFont = ref('MinecraftTitleCyrillic')
 
@@ -217,6 +219,20 @@ onMounted(() => {
   src: url('/fonts/minecraft_title_cyrillic.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pixy';
+  src: url('/fonts/Pixy.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('/fonts/Roboto-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
 }
 
 body {
