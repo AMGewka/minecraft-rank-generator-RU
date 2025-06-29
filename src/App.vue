@@ -45,6 +45,48 @@ const applyPreset = () => {
   }
 }
 
+onst fontImage = new Image()
+fontImage.src = 'ascii.png'
+
+let charWidths = {}
+
+const charToIndex = char => {
+  const code = char.charCodeAt(0)
+  return code >= 32 && code <= 127 ? code - 32 : 0
+}
+
+const analyzeCharWidths = () => {
+  const offCanvas = document.createElement('canvas')
+  offCanvas.width = 128
+  offCanvas.height = 128
+  const ctx = offCanvas.getContext('2d')
+  ctx.drawImage(fontImage, 0, 0)
+
+  for (let i = 0; i < 96; i++) {
+    const sx = (i % 16) * tileSize
+    const sy = Math.floor(i / 16) * tileSize
+    const imageData = ctx.getImageData(sx, sy, tileSize, tileSize)
+    const data = imageData.data
+
+    let minX = tileSize
+    let maxX = 0
+
+    for (let y = 0; y < tileSize; y++) {
+      for (let x = 0; x < tileSize; x++) {
+        const idx = (y * tileSize + x) * 4
+        const alpha = data[idx + 3]
+        if (alpha > 0) {
+          if (x < minX) minX = x
+          if (x > maxX) maxX = x
+        }
+      }
+    }
+
+    const width = maxX >= minX ? maxX - minX + 1 : 0
+    charWidths[i] = { width, offsetX: minX }
+  }
+}
+
 // Текст ранга
 const text = ref('Rank')
 // Ссылка на canvas
@@ -146,47 +188,7 @@ function adjustHSL(colorHex, lightnessAdjustment) {
 }
 </script>
 
-const fontImage = new Image()
-fontImage.src = 'ascii.png'
-
-let charWidths = {}
-
-const charToIndex = char => {
-  const code = char.charCodeAt(0)
-  return code >= 32 && code <= 127 ? code - 32 : 0
-}
-
-const analyzeCharWidths = () => {
-  const offCanvas = document.createElement('canvas')
-  offCanvas.width = 128
-  offCanvas.height = 128
-  const ctx = offCanvas.getContext('2d')
-  ctx.drawImage(fontImage, 0, 0)
-
-  for (let i = 0; i < 96; i++) {
-    const sx = (i % 16) * tileSize
-    const sy = Math.floor(i / 16) * tileSize
-    const imageData = ctx.getImageData(sx, sy, tileSize, tileSize)
-    const data = imageData.data
-
-    let minX = tileSize
-    let maxX = 0
-
-    for (let y = 0; y < tileSize; y++) {
-      for (let x = 0; x < tileSize; x++) {
-        const idx = (y * tileSize + x) * 4
-        const alpha = data[idx + 3]
-        if (alpha > 0) {
-          if (x < minX) minX = x
-          if (x > maxX) maxX = x
-        }
-      }
-    }
-
-    const width = maxX >= minX ? maxX - minX + 1 : 0
-    charWidths[i] = { width, offsetX: minX }
-  }
-}
+c
 
 const draw = () => {
   const ctx = canvas.value.getContext('2d')
