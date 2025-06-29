@@ -94,7 +94,7 @@ for (const name in presets) {
   const preset = presets[name];
   preset.shadow = adjustHSL(preset.bg, saturation);
 }
-</script>
+
 
 
 function adjustHSL(colorHex, lightnessAdjustment) {
@@ -135,7 +135,7 @@ function adjustHSL(colorHex, lightnessAdjustment) {
 
   return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
 }
-
+</script>
 const applyPreset = () => {
   const preset = presets[selectedPreset.value]
   if (preset) {
