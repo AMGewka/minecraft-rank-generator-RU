@@ -3,6 +3,13 @@
     <div class="form-container">
       <input v-model="text" placeholder="Введите текст ранга..." class="input dark-input" />
 
+      <!-- Новый список шрифтов -->
+      <select v-model="selectedFont" class="dark-select">
+        <option v-for="font in fontOptions" :key="font.value" :value="font.value">
+          {{ font.label }}
+        </option>
+      </select>
+
       <canvas ref="canvas" class="preview-canvas"></canvas>
       <img :src="imageSrc" alt="Предпросмотр" class="preview-img"
         :style="{ backgroundColor: bgColor, borderColor: borderColor }" />
@@ -48,26 +55,31 @@ const selectedPreset = ref('')
 const showBorder = ref(true)
 const showShadow = ref(true)
 
+const fontOptions = [
+  { label: 'Minecraft Title Cyrillic', value: 'MinecraftTitleCyrillic' }
+]
+const selectedFont = ref('MinecraftTitleCyrillic')
+
 const saturation = 0.08
 
 const presets = {
   // === Классические цвета ===
-  Чёрный:        { bg: '#2A2A2A', border: '#000000' }, // §0
-  "Тёмно-синий":   { bg: '#00002A', border: '#0000AA' }, // §1
-  "Тёмно-зелёный": { bg: '#002A00', border: '#00AA00' }, // §2
-  "Тёмно-бирюзовый": { bg: '#002A2A', border: '#00AAAA' }, // §3
-  "Тёмно-красный": { bg: '#2A0000', border: '#AA0000' }, // §4
-  "Тёмно-пурпурный": { bg: '#2A002A', border: '#AA00AA' }, // §5
-  Золотой:       { bg: '#2A2A00', border: '#FFAA00' }, // §6
-  Серый:         { bg: '#2A2A2A', border: '#AAAAAA' }, // §7
-  "Тёмно-серый":   { bg: '#151515', border: '#555555' }, // §8
-  Синий:         { bg: '#15153F', border: '#5555FF' }, // §9
-  Зелёный:       { bg: '#153F15', border: '#55FF55' }, // §a
-  Бирюзовый:     { bg: '#153F3F', border: '#55FFFF' }, // §b
-  Красный:       { bg: '#3F1515', border: '#FF5555' }, // §c
-  "Светло-пурпурный": { bg: '#3F153F', border: '#FF55FF' }, // §d
-  Жёлтый:        { bg: '#3F3F15', border: '#FFFF55' }, // §e
-  Белый:         { bg: '#3F3F3F', border: '#FFFFFF' }, // §f
+  Чёрный:        { bg: '#2A2A2A', border: '#000000' },
+  "Тёмно-синий":   { bg: '#00002A', border: '#0000AA' },
+  "Тёмно-зелёный": { bg: '#002A00', border: '#00AA00' },
+  "Тёмно-бирюзовый": { bg: '#002A2A', border: '#00AAAA' },
+  "Тёмно-красный": { bg: '#2A0000', border: '#AA0000' },
+  "Тёмно-пурпурный": { bg: '#2A002A', border: '#AA00AA' },
+  Золотой:       { bg: '#2A2A00', border: '#FFAA00' },
+  Серый:         { bg: '#2A2A2A', border: '#AAAAAA' },
+  "Тёмно-серый":   { bg: '#151515', border: '#555555' },
+  Синий:         { bg: '#15153F', border: '#5555FF' },
+  Зелёный:       { bg: '#153F15', border: '#55FF55' },
+  Бирюзовый:     { bg: '#153F3F', border: '#55FFFF' },
+  Красный:       { bg: '#3F1515', border: '#FF5555' },
+  "Светло-пурпурный": { bg: '#3F153F', border: '#FF55FF' },
+  Жёлтый:        { bg: '#3F3F15', border: '#FFFF55' },
+  Белый:         { bg: '#3F3F3F', border: '#FFFFFF' },
 
   // === Разные сочетания ===
   Классика:     { bg: '#282828', border: '#a0a0a0' },
@@ -89,8 +101,6 @@ const presets = {
   Искажённый:   { bg: '#0f3b1f', border: '#66ff99' }
 }
 
-
-// Добавление тени ко всем пресетам
 for (const name in presets) {
   const preset = presets[name];
   preset.shadow = adjustHSL(preset.bg, saturation);
@@ -146,7 +156,7 @@ function draw() {
   const ctx = canvas.value.getContext('2d')
   ctx.imageSmoothingEnabled = false
 
-  ctx.font = '48px MinecraftTitleCyrillic'
+  ctx.font = `48px ${selectedFont.value}`
   const textMetrics = ctx.measureText(text.value)
   const textWidth = Math.ceil(textMetrics.width)
   const finalWidth = textWidth + 40
@@ -167,12 +177,12 @@ function draw() {
   }
 
   // Шрифт
-  ctx.font = '48px MinecraftTitleCyrillic'
+  ctx.font = `48px ${selectedFont.value}`
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
 
   const centerX = finalWidth / 2
-  const centerY = finalHeight / 2 + 4  // ← смещение вниз на 4px
+  const centerY = finalHeight / 2 + 4
 
   // Тень
   if (showShadow.value) {
@@ -188,15 +198,14 @@ function draw() {
   imageSrc.value = canvas.value.toDataURL()
 }
 
-
 function downloadImage() {
   const link = document.createElement('a')
   link.href = imageSrc.value
-  link.download = `${text.value || 'rank'}.png` // ← имя по тексту, по умолчанию "rank"
+  link.download = `${text.value || 'rank'}.png`
   link.click()
 }
 
-watch([text, bgColor, borderColor, shadowColor, showBorder, showShadow], draw)
+watch([text, bgColor, borderColor, shadowColor, showBorder, showShadow, selectedFont], draw)
 onMounted(() => {
   draw()
 })
